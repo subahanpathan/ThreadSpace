@@ -1,11 +1,12 @@
 import { Community } from "@prisma/client"
-import { Button } from "@/components/ui/Button"
+import { SubscribeButton } from "./SubscribeButton"
 
 interface CommunityHeaderProps {
   community: Community
+  isSubscribed: boolean
 }
 
-export function CommunityHeader({ community }: CommunityHeaderProps) {
+export function CommunityHeader({ community, isSubscribed }: CommunityHeaderProps) {
   return (
     <div className="bg-white border-b border-gray-200 -mt-6 -mx-4 sm:-mx-6 lg:-mx-8 mb-6">
       <div className="h-20 bg-orange-500 w-full" />
@@ -21,7 +22,7 @@ export function CommunityHeader({ community }: CommunityHeaderProps) {
             <p className="text-sm text-gray-500">r/{community.slug}</p>
           </div>
           <div className="pb-1">
-            <Button className="px-8">Join</Button>
+            <SubscribeButton communityId={community.id} initialIsSubscribed={isSubscribed} />
           </div>
         </div>
       </div>

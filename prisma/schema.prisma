@@ -16,6 +16,7 @@ model User {
   posts     Post[]
   comments  Comment[]
   votes     Vote[]
+  subscriptions Community[] @relation("CommunitySubscription")
 }
 
 model Community {
@@ -26,6 +27,7 @@ model Community {
   imageUrl    String?
   createdAt   DateTime @default(now())
   posts       Post[]
+  subscribers User[] @relation("CommunitySubscription")
 }
 
 model Post {

@@ -1,6 +1,9 @@
 import { communityService } from "@/lib/services/community.service"
 import { notFound } from "next/navigation"
 import { CommunityHeader } from "@/components/community/CommunityHeader"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { db } from "@/lib/db"
 
 interface CommunityLayoutProps {
   children: React.ReactNode
@@ -13,15 +16,31 @@ export default async function CommunityLayout({
   children,
   params,
 }: CommunityLayoutProps) {
+  const session = await getServerSession(authOptions)
   const community = await communityService.getBySlug(params.communitySlug)
 
   if (!community) {
     notFound()
   }
 
+  let isSubscribed = false
+  if (session) {
+    const subscription = await db.user.findFirst({
+      where: {
+        id: session.user.id,
+        subscriptions: {
+          some: {
+            id: community.id,
+          },
+        },
+      },
+    })
+    isSubscribed = !!subscription
+  }
+
   return (
     <div className="flex flex-col">
-      <CommunityHeader community={community} />
+      <CommunityHeader community={community} isSubscribed={isSubscribed} />
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">{children}</div>
         <div className="hidden lg:block">

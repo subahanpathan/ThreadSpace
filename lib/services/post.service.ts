@@ -121,6 +121,41 @@ export const postService = {
     })
   },
 
+  async getPersonalizedFeed(userId: string) {
+    return await db.post.findMany({
+      where: {
+        community: {
+          subscribers: {
+            some: {
+              id: userId,
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+            image: true,
+          },
+        },
+        community: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+        votes: true,
+        _count: {
+          select: { comments: true },
+        },
+      },
+    })
+  },
+
   async create(data: CreatePostInput, authorId: string) {
     return await db.post.create({
       data: {
