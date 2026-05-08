@@ -1,10 +1,13 @@
 import { User, Community, Post, Comment, Vote } from "@prisma/client"
 
 export type PostWithAuthor = Post & {
-  author: User
-  community: Community
+  author: Pick<User, "id" | "username" | "image">
+  community: Pick<Community, "id" | "name" | "slug">
   votes: Vote[]
-  comments: Comment[]
+  comments: (Comment & { author: Pick<User, "id" | "username" | "image"> })[]
+  _count?: {
+    comments: number
+  }
 }
 
 export type CommunityWithCount = Community & {
