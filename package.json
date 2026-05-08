@@ -14,6 +14,7 @@
     "@supabase/supabase-js": "^2.105.3",
     "@tanstack/react-query": "^5.100.9",
     "bcryptjs": "^3.0.3",
+    "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^1.14.0",
     "next": "14.2.35",
@@ -21,6 +22,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.6.0",
+    "tailwind-merge": "^3.5.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
