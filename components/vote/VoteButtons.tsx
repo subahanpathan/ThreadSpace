@@ -1,6 +1,7 @@
 "use client"
 
-import { Vote, VoteType } from "@prisma/client"
+import { Vote } from "@prisma/client"
+type VoteType = "UP" | "DOWN"
 import { ArrowBigUp, ArrowBigDown } from "lucide-react"
 import { actionVote } from "@/actions/vote.actions"
 import { useSession } from "next-auth/react"

@@ -17,6 +17,15 @@ export const commentService = {
             image: true,
           },
         },
+        post: {
+          select: {
+            community: {
+              select: {
+                slug: true,
+              },
+            },
+          },
+        },
       },
     })
   },

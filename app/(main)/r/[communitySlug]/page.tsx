@@ -43,6 +43,7 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
         </div>
       </div>
 
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <PostFeed posts={posts as any} />
     </div>
   )

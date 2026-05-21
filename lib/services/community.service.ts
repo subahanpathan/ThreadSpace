@@ -47,4 +47,18 @@ export const communityService = {
     const community = await db.community.findUnique({ where: { slug } })
     return !!community
   },
+  async search(query: string) {
+    return await db.community.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { description: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      include: {
+        _count: { select: { posts: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    })
+  },
 }

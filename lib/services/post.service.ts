@@ -179,4 +179,25 @@ export const postService = {
       },
     })
   },
+  async search(query: string) {
+    return await db.post.findMany({
+      where: {
+        OR: [
+          { title: { contains: query, mode: "insensitive" } },
+          { content: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      include: {
+        author: {
+          select: { id: true, username: true, image: true },
+        },
+        community: {
+          select: { id: true, name: true, slug: true },
+        },
+        votes: true,
+        _count: { select: { comments: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    })
+  },
 }

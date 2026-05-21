@@ -10,7 +10,7 @@ export function Sidebar({ className }: { className?: string }) {
   ]
 
   return (
-    <aside className={cn("sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto pb-10", className)}>
+    <aside className={cn("overflow-y-auto", className)}>
       <div className="space-y-4">
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-xs font-semibold tracking-tight text-gray-500 uppercase">

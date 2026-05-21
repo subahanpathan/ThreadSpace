@@ -45,7 +45,15 @@ export async function actionToggleSubscription(communityId: string) {
       })
     }
 
+    const community = await db.community.findUnique({
+      where: { id: communityId },
+      select: { slug: true }
+    })
+
     revalidatePath("/")
+    if (community) {
+      revalidatePath(`/r/${community.slug}`)
+    }
     return { success: true, isSubscribed: !existingSubscription }
 
   } catch (error) {

@@ -21,6 +21,9 @@ export async function actionCreateComment(formData: unknown) {
     const result = await commentService.create(parsed.data, session.user.id)
     
     revalidatePath("/")
+    revalidatePath(`/r/${result.post.community.slug}/post/${result.postId}`)
+    revalidatePath(`/r/${result.post.community.slug}`)
+    
     return { success: true, data: result }
 
   } catch (error) {

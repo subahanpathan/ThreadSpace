@@ -1,5 +1,5 @@
 import { db } from "@/lib/db"
-import { VoteType } from "@prisma/client"
+type VoteType = "UP" | "DOWN"
 
 export const voteService = {
   async handleVote(postId: string, userId: string, type: VoteType) {
@@ -12,37 +12,28 @@ export const voteService = {
       },
     })
 
-    if (existingVote) {
-      if (existingVote.type === type) {
-        return await db.vote.delete({
-          where: {
-            userId_postId: {
-              userId,
-              postId,
-            },
-          },
+    const result = existingVote
+      ? existingVote.type === type
+        ? await db.vote.delete({
+            where: { userId_postId: { userId, postId } },
+          })
+        : await db.vote.update({
+            where: { userId_postId: { userId, postId } },
+            data: { type },
+          })
+      : await db.vote.create({
+          data: { type, userId, postId },
         })
-      }
 
-      return await db.vote.update({
-        where: {
-          userId_postId: {
-            userId,
-            postId,
-          },
+    const post = await db.post.findUnique({
+      where: { id: postId },
+      select: {
+        community: {
+          select: { slug: true },
         },
-        data: {
-          type,
-        },
-      })
-    }
-
-    return await db.vote.create({
-      data: {
-        type,
-        userId,
-        postId,
       },
     })
+
+    return { result, post }
   },
 }

@@ -18,9 +18,14 @@ export async function actionVote(formData: unknown) {
       return { error: "Invalid vote data" }
     }
 
-    await voteService.handleVote(parsed.data.postId, session.user.id, parsed.data.type)
+    const { post } = await voteService.handleVote(parsed.data.postId, session.user.id, parsed.data.type)
     
     revalidatePath("/")
+    if (post?.community?.slug) {
+      revalidatePath(`/r/${post.community.slug}`)
+      revalidatePath(`/r/${post.community.slug}/post/${parsed.data.postId}`)
+    }
+    
     return { success: true }
 
   } catch (error) {
