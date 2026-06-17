@@ -47,16 +47,16 @@ export function SignInForm() {
   }
 
   return (
-    <div className="w-full max-w-md space-y-8 p-8 bg-white rounded-xl shadow-lg border border-gray-100">
+    <div className="w-full max-w-md space-y-8 p-8 bg-background rounded-xl shadow-lg border border-border">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900">Sign In</h2>
-        <p className="mt-2 text-sm text-gray-600">Welcome back to ThreadSpace</p>
+        <h2 className="text-3xl font-bold tracking-tight text-foreground">Sign In</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Welcome back to ThreadSpace</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Email</label>
             <Input
               {...register("email")}
               type="email"
@@ -65,7 +65,7 @@ export function SignInForm() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Password</label>
             <Input
               {...register("password")}
               type="password"
@@ -81,8 +81,8 @@ export function SignInForm() {
       </form>
 
       <div className="text-center text-sm mt-6">
-        <span className="text-gray-600">New to ThreadSpace? </span>
-        <Link href="/sign-up" className="font-medium text-orange-600 hover:text-orange-500">
+        <span className="text-muted-foreground">New to ThreadSpace? </span>
+        <Link href="/sign-up" className="font-medium text-primary hover:text-primary/80">
           Sign Up
         </Link>
       </div>

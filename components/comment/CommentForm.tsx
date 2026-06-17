@@ -53,7 +53,7 @@ export function CommentForm({ postId }: CommentFormProps) {
         <textarea
           {...register("content")}
           placeholder="What are your thoughts?"
-          className="w-full min-h-[120px] rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none bg-gray-50/50 hover:bg-white transition-all shadow-inner"
+          className="w-full min-h-[120px] rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none bg-secondary/50 hover:bg-background transition-all shadow-inner text-foreground placeholder:text-muted-foreground"
         />
         {errors.content && (
           <p className="mt-1 text-xs text-red-500">{errors.content.message}</p>

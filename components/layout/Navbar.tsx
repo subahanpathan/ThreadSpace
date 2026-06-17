@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { MobileSidebar } from "./MobileSidebar"
 import { SearchBar } from "./SearchBar"
+import { ThemeToggle } from "./ThemeToggle"
 
 export async function Navbar() {
   const session = await getServerSession(authOptions)
@@ -16,20 +17,20 @@ export async function Navbar() {
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-200">
             <span className="text-primary-foreground font-bold text-xl">T</span>
           </div>
-          <span className="text-xl font-bold tracking-tight hidden sm:block font-serif bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">ThreadSpace</span>
+          <span className="text-xl font-bold tracking-tight hidden sm:block font-serif text-foreground">ThreadSpace</span>
         </Link>
       </div>
 
       <SearchBar />
-
       <div className="flex items-center gap-4 flex-1 justify-end">
+        <ThemeToggle />
         {session ? (
           <div className="flex items-center gap-3">
-            <Link 
+            <Link
               href={`/u/${session.user.username}`}
               className="text-sm font-medium hidden sm:block hover:text-primary transition-colors"
             >
-              u/{session.user.username}
+              {session.user.username}
             </Link>
             <Link href="/api/auth/signout">
               <Button variant="ghost" className="text-sm">Sign Out</Button>

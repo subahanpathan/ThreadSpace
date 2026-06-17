@@ -51,8 +51,8 @@ export const communityService = {
     return await db.community.findMany({
       where: {
         OR: [
-          { name: { contains: query, mode: "insensitive" } },
-          { description: { contains: query, mode: "insensitive" } },
+          { name: { contains: query } },
+          { description: { contains: query } },
         ],
       },
       include: {

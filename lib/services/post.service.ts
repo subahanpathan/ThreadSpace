@@ -3,10 +3,6 @@ import { CreatePostInput } from "@/lib/validations/post.schema"
 
 export const postService = {
   async getAll(sort: "latest" | "popular" = "latest") {
-    const orderBy = sort === "popular"
-      ? { votes: { _count: "desc" as const } }
-      : { createdAt: "desc" as const }
-
     return await db.post.findMany({
       orderBy: sort === "popular" ? { votes: { _count: "desc" } } : { createdAt: "desc" },
       include: {
@@ -25,6 +21,7 @@ export const postService = {
           },
         },
         votes: true,
+        savedBy: { select: { id: true } },
         _count: {
           select: { comments: true },
         },
@@ -52,6 +49,7 @@ export const postService = {
           },
         },
         votes: true,
+        savedBy: { select: { id: true } },
         _count: {
           select: { comments: true },
         },
@@ -78,6 +76,7 @@ export const postService = {
           },
         },
         votes: true,
+        savedBy: { select: { id: true } },
         comments: {
           include: {
             author: {
@@ -114,6 +113,7 @@ export const postService = {
           },
         },
         votes: true,
+        savedBy: { select: { id: true } },
         _count: {
           select: { comments: true },
         },
@@ -121,7 +121,7 @@ export const postService = {
     })
   },
 
-  async getPersonalizedFeed(userId: string) {
+  async getPersonalizedFeed(userId: string, sort: "latest" | "popular" = "latest") {
     return await db.post.findMany({
       where: {
         community: {
@@ -132,7 +132,7 @@ export const postService = {
           },
         },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: sort === "popular" ? { votes: { _count: "desc" } } : { createdAt: "desc" },
       include: {
         author: {
           select: {
@@ -149,6 +149,7 @@ export const postService = {
           },
         },
         votes: true,
+        savedBy: { select: { id: true } },
         _count: {
           select: { comments: true },
         },
@@ -179,12 +180,13 @@ export const postService = {
       },
     })
   },
+
   async search(query: string) {
     return await db.post.findMany({
       where: {
         OR: [
-          { title: { contains: query, mode: "insensitive" } },
-          { content: { contains: query, mode: "insensitive" } },
+          { title: { contains: query } },
+          { content: { contains: query } },
         ],
       },
       include: {
@@ -195,9 +197,67 @@ export const postService = {
           select: { id: true, name: true, slug: true },
         },
         votes: true,
+        savedBy: { select: { id: true } },
         _count: { select: { comments: true } },
       },
       orderBy: { createdAt: "desc" },
+    })
+  },
+
+  async isSaved(postId: string, userId: string) {
+    const post = await db.post.findUnique({
+      where: { id: postId },
+      select: {
+        savedBy: {
+          where: { id: userId },
+          select: { id: true },
+        },
+      },
+    })
+    return (post?.savedBy?.length ?? 0) > 0
+  },
+
+  async save(postId: string, userId: string) {
+    return await db.post.update({
+      where: { id: postId },
+      data: {
+        savedBy: {
+          connect: { id: userId },
+        },
+      },
+    })
+  },
+
+  async unsave(postId: string, userId: string) {
+    return await db.post.update({
+      where: { id: postId },
+      data: {
+        savedBy: {
+          disconnect: { id: userId },
+        },
+      },
+    })
+  },
+
+  async getSavedByAuthor(userId: string) {
+    return await db.post.findMany({
+      where: {
+        savedBy: {
+          some: { id: userId },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      include: {
+        author: {
+          select: { id: true, username: true, image: true },
+        },
+        community: {
+          select: { id: true, name: true, slug: true },
+        },
+        votes: true,
+        savedBy: { select: { id: true } },
+        _count: { select: { comments: true } },
+      },
     })
   },
 }

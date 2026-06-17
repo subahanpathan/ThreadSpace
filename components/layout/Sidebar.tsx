@@ -13,7 +13,7 @@ export function Sidebar({ className }: { className?: string }) {
     <aside className={cn("overflow-y-auto", className)}>
       <div className="space-y-4">
         <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-xs font-semibold tracking-tight text-gray-500 uppercase">
+          <h2 className="mb-2 px-4 text-xs font-semibold tracking-tight text-muted-foreground uppercase">
             Feeds
           </h2>
           <div className="space-y-1">
@@ -21,9 +21,9 @@ export function Sidebar({ className }: { className?: string }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100 transition-colors"
+                className="group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-muted transition-colors"
               >
-                <item.icon className="mr-3 h-5 w-5 text-gray-500 group-hover:text-gray-900" />
+                <item.icon className="mr-3 h-5 w-5 text-muted-foreground group-hover:text-foreground" />
                 {item.label}
               </Link>
             ))}
@@ -31,15 +31,15 @@ export function Sidebar({ className }: { className?: string }) {
         </div>
 
         <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-xs font-semibold tracking-tight text-gray-500 uppercase">
+          <h2 className="mb-2 px-4 text-xs font-semibold tracking-tight text-muted-foreground uppercase">
             Communities
           </h2>
           <div className="space-y-1">
             <Link
               href="/communities/create"
-              className="group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100 transition-colors"
+              className="group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-muted transition-colors"
             >
-              <Plus className="mr-3 h-5 w-5 text-gray-500 group-hover:text-gray-900" />
+              <Plus className="mr-3 h-5 w-5 text-muted-foreground group-hover:text-foreground" />
               Create Community
             </Link>
           </div>

@@ -7,7 +7,7 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <div className="max-w-7xl mx-auto flex pt-14 px-4 sm:px-6 lg:px-8">
         <Sidebar className="hidden lg:block w-64 flex-shrink-0 sticky top-20 h-[calc(100vh-5rem)] pb-10" />

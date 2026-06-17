@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "react-hot-toast"
@@ -13,14 +13,19 @@ import { cn } from "@/lib/utils"
 import { FileText, Image as ImageIcon, Link as LinkIcon } from "lucide-react"
 
 interface CreatePostFormProps {
-  communityId: string
-  communitySlug: string
+  communityId?: string
+  communitySlug?: string
+  communities?: { id: string; name: string; slug: string }[]
 }
 
-export function CreatePostForm({ communityId, communitySlug }: CreatePostFormProps) {
+export function CreatePostForm({ communityId, communitySlug, communities }: CreatePostFormProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const defaultType = (searchParams?.get("type") as "text" | "image" | "link") || "text"
+
   const [isLoading, setIsLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState<"text" | "image" | "link">("text")
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [activeTab, setActiveTab] = useState<"text" | "image" | "link">(defaultType)
 
   const {
     register,
@@ -30,25 +35,38 @@ export function CreatePostForm({ communityId, communitySlug }: CreatePostFormPro
   } = useForm<CreatePostInput>({
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {
-      type: "text",
-      communityId: communityId,
+      type: defaultType,
+      communityId: communityId || "",
     },
   })
 
   const onSubmit = async (data: CreatePostInput) => {
     setIsLoading(true)
     try {
-      const result = await actionCreatePost(data)
-
-      if (result.error) {
-        toast.error(result.error)
+      const formData = new FormData()
+      formData.append('title', data.title)
+      if (data.content) formData.append('content', data.content)
+      formData.append('communityId', data.communityId)
+      formData.append('type', data.type)
+      if (data.linkUrl) formData.append('linkUrl', data.linkUrl)
+      if (selectedFile) {
+        formData.append('image', selectedFile)
+      }
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        body: formData,
+      })
+      const result = await response.json()
+      if (!response.ok) {
+        toast.error(result.error || 'Failed to create post')
       } else {
-        toast.success("Post created successfully!")
-        router.push(`/r/${communitySlug}/post/${result.data?.id}`)
+        toast.success('Post created successfully!')
+        const targetSlug = result.community?.slug || communitySlug
+        router.push(`/r/${targetSlug}/post/${result.id}`)
         router.refresh()
       }
     } catch (error) {
-      toast.error("Something went wrong")
+      toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
     }
@@ -66,7 +84,7 @@ export function CreatePostForm({ communityId, communitySlug }: CreatePostFormPro
   ]
 
   return (
-    <div className="w-full bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
+    <div className="w-full bg-background rounded-lg border border-border overflow-hidden shadow-sm">
       <div className="flex border-b">
         {tabs.map((tab) => (
           <button
@@ -76,8 +94,8 @@ export function CreatePostForm({ communityId, communitySlug }: CreatePostFormPro
             className={cn(
               "flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium border-b-2 transition-all",
               activeTab === tab.id
-                ? "border-orange-500 text-orange-600 bg-orange-50/50"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                ? "border-primary text-primary bg-primary/10"
+                : "border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary/50"
             )}
           >
             <tab.icon className="h-4 w-4" />
@@ -87,6 +105,29 @@ export function CreatePostForm({ communityId, communitySlug }: CreatePostFormPro
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4">
+        {!communityId && communities && (
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-foreground">Choose a community</label>
+            <select
+              onChange={(e) => {
+                setValue("communityId", e.target.value)
+              }}
+              defaultValue=""
+              className="w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background text-foreground"
+            >
+              <option value="" disabled>Select a community...</option>
+              {communities.map((c) => (
+                <option key={c.id} value={c.id}>
+                  r/{c.slug}
+                </option>
+              ))}
+            </select>
+            {errors.communityId?.message && (
+              <p className="text-xs text-destructive">{errors.communityId.message}</p>
+            )}
+          </div>
+        )}
+
         <div>
           <Input
             {...register("title")}
@@ -101,17 +142,17 @@ export function CreatePostForm({ communityId, communitySlug }: CreatePostFormPro
             <textarea
               {...register("content")}
               placeholder="Text (optional)"
-              className="w-full min-h-[150px] rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 resize-y"
+              className="w-full min-h-[150px] rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y bg-background text-foreground"
             />
           </div>
         )}
 
         {activeTab === "image" && (
           <div>
-            <Input
-              {...register("imageUrl")}
-              placeholder="Image URL"
-              error={errors.imageUrl?.message}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
             />
           </div>
         )}

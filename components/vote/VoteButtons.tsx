@@ -50,23 +50,23 @@ export function VoteButtons({ postId, votes }: VoteButtonsProps) {
       <button
         onClick={() => handleVote("UP")}
         className={cn(
-          "hover:bg-gray-200 p-1 rounded transition-colors",
-          userVote?.type === "UP" ? "text-orange-600 bg-orange-50" : "text-gray-400 hover:text-orange-600"
+          "hover:bg-secondary p-1 rounded transition-colors",
+          userVote?.type === "UP" ? "text-orange-600 bg-orange-50 dark:bg-orange-950" : "text-muted-foreground hover:text-orange-600"
         )}
       >
         <ArrowBigUp className={cn("h-6 w-6", userVote?.type === "UP" && "fill-current")} />
       </button>
       <span className={cn(
         "text-sm font-bold",
-        userVote?.type === "UP" ? "text-orange-600" : userVote?.type === "DOWN" ? "text-blue-600" : "text-gray-900"
+        userVote?.type === "UP" ? "text-orange-600" : userVote?.type === "DOWN" ? "text-blue-600" : "text-foreground"
       )}>
         {count}
       </span>
       <button
         onClick={() => handleVote("DOWN")}
         className={cn(
-          "hover:bg-gray-200 p-1 rounded transition-colors",
-          userVote?.type === "DOWN" ? "text-blue-600 bg-blue-50" : "text-gray-400 hover:text-blue-600"
+          "hover:bg-secondary p-1 rounded transition-colors",
+          userVote?.type === "DOWN" ? "text-blue-600 bg-blue-50 dark:bg-blue-950" : "text-muted-foreground hover:text-blue-600"
         )}
       >
         <ArrowBigDown className={cn("h-6 w-6", userVote?.type === "DOWN" && "fill-current")} />

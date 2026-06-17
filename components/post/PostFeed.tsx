@@ -8,8 +8,8 @@ interface PostFeedProps {
 export function PostFeed({ posts }: PostFeedProps) {
   if (posts.length === 0) {
     return (
-      <div className="text-center py-20 bg-white rounded-lg border border-gray-200 shadow-sm">
-        <p className="text-gray-500 text-lg">No posts yet. Be the first to share something!</p>
+      <div className="text-center py-20 bg-secondary/30 rounded-lg border border-dashed border-border shadow-sm">
+        <p className="text-muted-foreground text-lg">No posts yet. Be the first to share something!</p>
       </div>
     )
   }

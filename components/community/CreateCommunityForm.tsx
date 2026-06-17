@@ -42,22 +42,20 @@ export function CreateCommunityForm() {
   }
 
   return (
-    <div className="w-full max-w-2xl bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+    <div className="w-full max-w-2xl bg-background p-6 rounded-lg border border-border shadow-sm">
       <h1 className="text-xl font-semibold mb-6">Create a Community</h1>
       
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             Name
           </label>
-          <p className="text-xs text-gray-500 mb-2">
+          <p className="text-xs text-muted-foreground mb-2">
             Community names including capitalization cannot be changed.
           </p>
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">r/</span>
             <Input
               {...register("name")}
-              className="pl-7"
               placeholder="community_name"
               error={errors.name?.message}
             />
@@ -65,12 +63,12 @@ export function CreateCommunityForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-foreground mb-1">
             Description (Optional)
           </label>
           <textarea
             {...register("description")}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full rounded-md border border-input bg-background text-foreground px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             rows={4}
             placeholder="Tell us about your community..."
           />

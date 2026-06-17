@@ -3,6 +3,7 @@ import { PostWithAuthor } from "@/types"
 import { formatDistanceToNow } from "date-fns"
 import { MessageSquare, Share2, ExternalLink } from "lucide-react"
 import { VoteButtons } from "@/components/vote/VoteButtons"
+import { SaveButton } from "@/components/post/SaveButton"
 import Image from "next/image"
 
 interface PostCardProps {
@@ -21,10 +22,10 @@ export function PostCard({ post }: PostCardProps) {
       <div className="flex-1 p-3 sm:p-4 space-y-2">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <Link href={`/r/${post.community.slug}`} className="font-semibold text-foreground hover:text-primary transition-colors">
-            r/{post.community.slug}
+            {post.community.slug}
           </Link>
           <span className="text-muted-foreground/50">•</span>
-          <span>Posted by u/{post.author.username}</span>
+          <span>Posted by {post.author.username}</span>
           <span className="text-muted-foreground/50">•</span>
           <span>{formatDistanceToNow(new Date(post.createdAt))} ago</span>
         </div>
@@ -72,6 +73,7 @@ export function PostCard({ post }: PostCardProps) {
             <Share2 className="h-4 w-4" />
             Share
           </button>
+          <SaveButton postId={post.id} initialIsSaved={(post.savedBy?.length ?? 0) > 0} />
         </div>
       </div>
     </div>

@@ -12,8 +12,8 @@ export default async function CreateCommunityPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="border-b border-gray-200 pb-5">
-        <h3 className="text-lg font-medium leading-6 text-gray-900">Communities</h3>
+      <div className="border-b border-border pb-5">
+        <h3 className="text-lg font-medium leading-6 text-foreground">Communities</h3>
       </div>
       <CreateCommunityForm />
     </div>
