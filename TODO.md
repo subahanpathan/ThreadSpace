@@ -1,0 +1,5 @@
+- [ ] Fix MobileSidebar z-index/stacking so menu overlays All Posts content and links are clickable
+- [ ] Ensure overlay click closes drawer and drawer sits above page content
+- [ ] Validate on mobile layout (lg:hidden), no hidden/covered links
+- [ ] Re-run lint/build (once command runner works)
+- [x] Fix MobileSidebar stacking/z-index so menu drawer appears above content
